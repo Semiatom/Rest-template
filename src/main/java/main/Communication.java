@@ -4,14 +4,12 @@ package main;
 import entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -36,23 +34,68 @@ private final String URL = "http://94.198.50.185:7081/api/users";
         return set_cookie;
     }
 
+//    public String createUser(User user, String cookie) {
+//    HttpHeaders httpHeaders = new HttpHeaders();
+//    httpHeaders.add("Cookie", cookie);
+//
+//    HttpEntity entity = new HttpEntity<>(user, httpHeaders);
+//
+//    ResponseEntity response = restTemplate.exchange(URL, HttpMethod.POST, entity, User.class);
+//    User userCreated = (User) response.getBody();
+//        System.out.println(userCreated + " is created");
+//      return restTemplate.exchange(URL, HttpMethod.POST, entity, String.class).getBody();
+//}
+
+
     public String createUser(User user, String cookie) {
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.add("Cookie", cookie);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Cookie", cookie);
+        HttpEntity<User> entity = new HttpEntity<User>(user,headers);
 
-    HttpEntity entity = new HttpEntity<>(user, httpHeaders);
-
-    ResponseEntity response = restTemplate.exchange()
-
-
+        String response =  restTemplate.exchange(
+                URL, HttpMethod.POST, entity, String.class).getBody();
+        System.out.println(response);
+        return response;
     }
 
+    public String editUser(User user, String cookie) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Cookie", cookie);
+        HttpEntity<User> entity = new HttpEntity<User>(user,headers);
 
-    public void editUser(User user) {
-
+        String response =  restTemplate.exchange(
+                URL, HttpMethod.PUT, entity, String.class).getBody();
+        System.out.println(response);
+        return response;
     }
-    public void deleteUser(User user) {
+//    public String deleteUser(int id, String cookie) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        headers.add("Cookie", cookie);
+//        HttpEntity<User> entity = new HttpEntity<>(headers);
+//        String response =  restTemplate.exchange(
+//                URL+ "/"+ id, HttpMethod.DELETE, entity, String.class).getBody();
+//        System.out.println(response);
+//
+//        return response;
+//
+//    }
 
-    }
+//    public String common (int id, User user1, User user2,String cookie){
+//
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+//        headers.add("Cookie", cookie);
+//        HttpEntity<User> entity = new HttpEntity<User>(user2,headers);
+//
+//        String response =  restTemplate.exchange(
+//                URL, HttpMethod.POST, entity, String.class).getBody();
+//        System.out.println(response);
+//        return response;
+//
+//    }
 
 }
